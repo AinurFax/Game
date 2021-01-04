@@ -58,7 +58,12 @@ tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png'), 
                           'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
                           'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
                           'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png']}
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',]}
 
 tile_width = tile_height = 50
 
