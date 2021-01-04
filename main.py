@@ -50,7 +50,15 @@ def terminate():
 
 
 tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png'), 'water': load_image('woda.jpg'),
-               'forest': ['дерево.png', 'дуб.png', 'недуб.png']}
+               'forest': ['дерево.png', 'дуб.png', 'недуб.png', 'дуб.png', 'недуб.png', 'дуб.png', 'недуб.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png']}
 
 tile_width = tile_height = 50
 
