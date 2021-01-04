@@ -49,7 +49,8 @@ def terminate():
     sys.exit()
 
 
-tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png'), 'water': load_image('woda.jpg')}
+tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png'), 'water': load_image('woda.jpg'),
+               'forest': load_image('дерево.png')}
 
 tile_width = tile_height = 50
 
@@ -69,17 +70,31 @@ dom_group = pygame.sprite.Group()
 
 
 def generate_level(level):
-    new_player, x, y = None, None, None
+    forest = False
+    a = choice([1, 2, 3, 4, 5, 6])
+    b = choice([2, 3, 4, 5, 6, 7])
+    a1 = 0
+    a2 = 0
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
-                Tile('empty', x, y)
+                if a1 == a:
+                    if a2 != b:
+                        a1 = 0
+                        a2 += 1
+                        Tile('empty', x, y)
+                        Tile('forest', x, y)
+                        a = choice([1, 2, 3, 4, 5, 6])
+                    else:
+                        Tile('empty', x, y)
+                else:
+                    a1 += 1
+                    Tile('empty', x, y)
             elif level[y][x] == '#':
                 Tile('wall', x, y)
             else:
                 Tile('water', x, y)
-    # вернем игрока, а также размер поля в клетках
-    return new_player, level, x, y
+    return level, forest
 
 
 def random_level(level1):
@@ -99,7 +114,7 @@ def random_level(level1):
 
 level = load_level('levelex1.txt')
 level = random_level(level)
-generate_level(level)
+level, forest = generate_level(level)
 running = True
 sprite = pygame.sprite.Sprite()
 sprite.image = load_image("dom.png")
