@@ -102,7 +102,7 @@ level = random_level(level)
 generate_level(level)
 running = True
 sprite = pygame.sprite.Sprite()
-sprite.image = load_image("dom.jpg")
+sprite.image = load_image("dom.png")
 sprite.rect = sprite.image.get_rect()
 sprite.rect.x = 200
 sprite.rect.y = 20
