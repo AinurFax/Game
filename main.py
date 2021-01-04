@@ -50,7 +50,7 @@ def terminate():
 
 
 tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png'), 'water': load_image('woda.jpg'),
-               'forest': load_image('дерево.png')}
+               'forest': ['дерево.png', 'дуб.png', 'недуб.png']}
 
 tile_width = tile_height = 50
 
@@ -58,7 +58,10 @@ tile_width = tile_height = 50
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(tiles_group, all_sprites)
-        self.image = tile_images[tile_type]
+        if tile_type == 'forest':
+            self.image = load_image(choice(tile_images[tile_type]))
+        else:
+            self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
 
@@ -81,7 +84,7 @@ def generate_level(level):
             elif level[y][x] == '#':
                 Tile('wall', x, y)
             elif level[y][x] == '@':
-                Tile('wall', x, y)
+                Tile('water', x, y)
     return level, forest
 
 
@@ -90,7 +93,7 @@ def random_level(level1):
     q = 0
     s = choice(['#', '.', '@'])
     a = choice([1, 2, 3, 4, 5, 6])
-    b = choice([2, 3, 4, 5, 6, 7])
+    b = choice([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])
     a1 = 0
     a2 = 0
     for i in range(len(level1)):
