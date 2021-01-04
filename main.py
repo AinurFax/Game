@@ -71,44 +71,52 @@ dom_group = pygame.sprite.Group()
 
 def generate_level(level):
     forest = False
-    a = choice([1, 2, 3, 4, 5, 6])
-    b = choice([2, 3, 4, 5, 6, 7])
-    a1 = 0
-    a2 = 0
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
-                if a1 == a:
-                    if a2 != b:
-                        a1 = 0
-                        a2 += 1
-                        Tile('empty', x, y)
-                        Tile('forest', x, y)
-                        a = choice([1, 2, 3, 4, 5, 6])
-                    else:
-                        Tile('empty', x, y)
-                else:
-                    a1 += 1
-                    Tile('empty', x, y)
+                Tile('empty', x, y)
+            elif level[y][x] == '!':
+                Tile('empty', x, y)
+                Tile('forest', x, y)
             elif level[y][x] == '#':
                 Tile('wall', x, y)
-            else:
-                Tile('water', x, y)
+            elif level[y][x] == '@':
+                Tile('wall', x, y)
     return level, forest
 
 
 def random_level(level1):
     level2 = [[]]
-    a = 0
+    q = 0
     s = choice(['#', '.', '@'])
+    a = choice([1, 2, 3, 4, 5, 6])
+    b = choice([2, 3, 4, 5, 6, 7])
+    a1 = 0
+    a2 = 0
     for i in range(len(level1)):
         for j in range(len(level1)):
-            if a == 5 and j % 8 == 0:
+            if q == 5 and j % 8 == 0:
                 s = choice(['#', '.', '@'])
-                a = 0
-            level2[i].append(s)
+                q = 0
+            if s == '.':
+                if a1 == a:
+                    if a2 != b:
+                        a = choice([1, 2, 3, 4, 5, 6])
+                        a2 += 1
+                        level2[i].append('!')
+                        a1 = 0
+                    else:
+                        level2[i].append(s)
+                        a1 += 1
+                else:
+                    level2[i].append(s)
+                    a1 += 1
+            else:
+                level2[i].append(s)
+                a2 = 0
+                a1 = 0
         level2.append([])
-        a += 1
+        q += 1
     return level2
 
 
