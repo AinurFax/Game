@@ -63,7 +63,9 @@ tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png'), 
                           'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
                           'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
                           'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',]}
+                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png'],
+               'desert': ['кактус.png', 'кактусмини.png'],
+                'fish': ['рыбка.png']}
 
 tile_width = tile_height = 50
 
@@ -72,6 +74,10 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(tiles_group, all_sprites)
         if tile_type == 'forest':
+            self.image = load_image(choice(tile_images[tile_type]))
+        elif tile_type == 'desert':
+            self.image = load_image(choice(tile_images[tile_type]))
+        elif tile_type == 'fish':
             self.image = load_image(choice(tile_images[tile_type]))
         else:
             self.image = tile_images[tile_type]
@@ -98,6 +104,12 @@ def generate_level(level):
                 Tile('wall', x, y)
             elif level[y][x] == '@':
                 Tile('water', x, y)
+            elif level[y][x] == '+':
+                Tile('wall', x, y)
+                Tile('desert', x, y)
+            elif level[y][x] == '-':
+                Tile('water', x, y)
+                Tile('fish', x, y)
     return level, forest
 
 
@@ -107,14 +119,24 @@ def random_level(level1):
     s = choice(['#', '.', '@'])
     a = choice([1, 2, 3, 4, 5, 6])
     b = choice([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])
+    b1 = choice([2, 3, 4, 5, 6, 7, 8, 9, 10])
+    b2 = choice([2, 3, 4, 5, 6, 7, 8, 9, 10])
     a1 = 0
     a2 = 0
+    a3 = 0
+    a4 = 0
+    a5 = 0
+    a6 = 0
     for i in range(len(level1)):
         for j in range(len(level1)):
             if q == 5 and j % 8 == 0:
                 s = choice(['#', '.', '@'])
                 q = 0
             if s == '.':
+                a3 = 0
+                a4 = 0
+                a5 = 0
+                a6 = 0
                 if a1 == a:
                     if a2 != b:
                         a = choice([1, 2, 3, 4, 5, 6])
@@ -127,10 +149,41 @@ def random_level(level1):
                 else:
                     level2[i].append(s)
                     a1 += 1
-            else:
-                level2[i].append(s)
+            elif s == '#':
                 a2 = 0
                 a1 = 0
+                a5 = 0
+                a6 = 0
+                if a3 == a:
+                    if a4 != b1:
+                        a = choice([1, 2, 3, 4, 5, 6])
+                        a4 += 1
+                        level2[i].append('+')
+                        a3 = 0
+                    else:
+                        level2[i].append(s)
+                        a3 += 1
+                else:
+                    level2[i].append(s)
+                    a3 += 1
+            elif s == '@':
+                level2[i].append(s)
+                a3 = 0
+                a4 = 0
+                a2 = 0
+                a1 = 0
+                if a5 == a:
+                    if a6 != b2:
+                        a = choice([1, 2, 3, 4, 5, 6])
+                        a6 += 1
+                        level2[i].append('-')
+                        a5 = 0
+                    else:
+                        level2[i].append(s)
+                        a5 += 1
+                else:
+                    level2[i].append(s)
+                    a5 += 1
         level2.append([])
         q += 1
     return level2
@@ -150,6 +203,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEMOTION:
+            sprite.rect.x = event.pos[0]
+            sprite.rect.y = event.pos[1]
     all_sprites.draw(screen)
     tiles_group.draw(screen)
     dom_group.draw(screen)
