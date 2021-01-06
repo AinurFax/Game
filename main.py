@@ -195,8 +195,6 @@ class Board:
 
     def add(self, *rect):
         x = 0
-        if self.a == 0:
-           x = 1
         for i in self.rect:
             if i == []:
                 break
@@ -208,6 +206,8 @@ class Board:
         self.rect[self.a].append(rect)
         self.rect.append([])
         self.a += 1
+        if x == 0:
+            x = 1
         return x
 
 
