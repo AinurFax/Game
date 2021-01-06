@@ -167,7 +167,6 @@ def random_level(level1):
                     level2[i].append(s)
                     a3 += 1
             elif s == '@':
-                level2[i].append(s)
                 a3 = 0
                 a4 = 0
                 a2 = 0
@@ -189,6 +188,30 @@ def random_level(level1):
     return level2
 
 
+class Board:
+    def __init__(self):
+        self.rect = [[]]
+        self.a = 0
+
+    def add(self, *rect):
+        x = 0
+        if self.a == 0:
+           x = 1
+        for i in self.rect:
+            if i == []:
+                break
+            i1, i2 = i[0][0], i[0][1]
+            if i1 + 100 > rect[0] and i1 - 100 < rect[0]:
+                x += 1
+            elif i2 + 100 > rect[1] and i2 - 100 < rect[1]:
+                x += 1
+        self.rect[self.a].append(rect)
+        self.rect.append([])
+        self.a += 1
+        return x
+
+
+k = 0
 level = load_level('levelex1.txt')
 level = random_level(level)
 level, forest = generate_level(level)
@@ -196,19 +219,35 @@ running = True
 sprite = pygame.sprite.Sprite()
 sprite.image = load_image("dom.png")
 sprite.rect = sprite.image.get_rect()
-sprite.rect.x = 200
-sprite.rect.y = 20
 dom_group.add(sprite)
+board = Board()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEMOTION:
-            sprite.rect.x = event.pos[0]
-            sprite.rect.y = event.pos[1]
+            if event.pos[0] - 30 > 0 and event.pos[1] - 30 > 0 and event.pos[0] - 30 < 800 and event.pos[1] - 30 < 800:
+                sprite.rect.x = event.pos[0] - 30
+                sprite.rect.y = event.pos[1] - 30
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.pos[0] - 30 > 0 and event.pos[1] - 30 > 0 and event.pos[0] - 30 < 800 and event.pos[1] - 30 < 800:
+                sprite.rect.x = event.pos[0] - 30
+                sprite.rect.y = event.pos[1] - 30
+                sprite = pygame.sprite.Sprite()
+                sprite.image = load_image("dom.png")
+                sprite.rect = sprite.image.get_rect()
+                sprite.rect.x = event.pos[0] - 30
+                sprite.rect.y = event.pos[1] - 30
+                k += board.add(event.pos[0] - 30, event.pos[1] - 30)
+                dom_group.add(sprite)
+    screen.fill((0, 0, 0))
     all_sprites.draw(screen)
     tiles_group.draw(screen)
     dom_group.draw(screen)
+    font = pygame.font.Font(None, 20)
+    text = font.render(str(k), True, [255, 255, 255])
+    textpos = (900, 10)
+    screen.blit(text, textpos)
     pygame.display.flip()
     clock.tick(50)
 
