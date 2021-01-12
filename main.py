@@ -217,7 +217,7 @@ level = random_level(level)
 level, forest = generate_level(level)
 running = True
 sprite = pygame.sprite.Sprite()
-sprite.image = load_image("dom.png")
+sprite.image = load_image("домик.png")
 sprite.rect = sprite.image.get_rect()
 dom_group.add(sprite)
 board = Board()
@@ -248,7 +248,7 @@ while running:
                 sprite.rect.x = event.pos[0]
                 sprite.rect.y = event.pos[1]
                 sprite = pygame.sprite.Sprite()
-                sprite.image = load_image("dom.png")
+                sprite.image = load_image("домик.png")
                 sprite.rect = sprite.image.get_rect()
                 sprite.rect.x = event.pos[0]
                 sprite.rect.y = event.pos[1]
