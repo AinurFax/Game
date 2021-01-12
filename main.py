@@ -65,7 +65,7 @@ tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png'), 
                           'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
                           'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png'],
                'desert': ['кактус.png', 'кактусмини.png'],
-                'fish': ['рыбка.png']}
+                'fish': ['рыбка.png'], 'ramka': ['рамка_зелёная.png', 'рамка_красная.png'],}
 
 tile_width = tile_height = 50
 
@@ -89,6 +89,7 @@ class Tile(pygame.sprite.Sprite):
 all_sprites = pygame.sprite.Group()
 tiles_group = pygame.sprite.Group()
 dom_group = pygame.sprite.Group()
+ramk_group = pygame.sprite.Group()
 
 
 def generate_level(level):
@@ -192,6 +193,8 @@ class Board:
     def __init__(self):
         self.rect = [[]]
         self.a = 0
+        self.ram = 0
+        self.dom = ['домик.png', 'замок.png']
 
     def add(self, *rect):
         x = 1
@@ -209,23 +212,49 @@ class Board:
     def dist(self, *pos):
         pygame.draw.circle(screen, pygame.Color('green'), (pos[0] + 30, pos[1] + 30), 200, 2)
 
+    def ramk(self, name):
+        sprite = pygame.sprite.Sprite()
+        sprite.image = load_image(name)
+        sprite.rect = sprite.image.get_rect()
+        sprite.rect.x = self.ram
+        sprite.rect.y = 850
+        ramk_group.add(sprite)
+        if self.ram // 100 < 2:
+            sprite = pygame.sprite.Sprite()
+            sprite.image = load_image(self.dom[self.ram // 100])
+            sprite.rect = sprite.image.get_rect()
+            if self.ram // 100 == 0:
+                sprite.rect.x = self.ram
+                sprite.rect.y = 860
+            else:
+                sprite.rect.x = self.ram
+                sprite.rect.y = 850
+            ramk_group.add(sprite)
+        self.ram += 100
+
+    def update(self, *pos):
+        sprite = pygame.sprite.Sprite()
+        sprite.image = load_image(self.dom[pos[0][0] // 100])
+        sprite.rect = sprite.image.get_rect()
+        sprite.rect.x = pos[0][0]
+        sprite.rect.y = pos[0][1]
+        return sprite
+
 
 k = 0
 w = 0
+q = 0
 level = load_level('levelex1.txt')
 level = random_level(level)
 level, forest = generate_level(level)
 running = True
-sprite = pygame.sprite.Sprite()
-sprite.image = load_image("домик.png")
-sprite.rect = sprite.image.get_rect()
-dom_group.add(sprite)
 board = Board()
+for _ in range(10):
+    board.ramk('рамка_красная.png')
 while running:
     screen.fill((0, 0, 0))
     all_sprites.draw(screen)
     tiles_group.draw(screen)
-    dom_group.draw(screen)
     font = pygame.font.Font(None, 20)
     text = font.render(str(k), True, [255, 255, 255])
     textpos = (900, 10)
@@ -235,28 +264,29 @@ while running:
             running = False
         if event.type == pygame.MOUSEMOTION:
             if event.pos[0] > 0 and event.pos[1] > 0 and event.pos[0] < 800 and event.pos[1] < 800:
-                sprite.rect.x = event.pos[0]
-                sprite.rect.y = event.pos[1]
-                a1 = event.pos[0]
-                a2 = event.pos[1]
-                w = 1
-                pygame.mouse.set_visible(False)
+                if q == 1:
+                    sprite.rect.x = event.pos[0]
+                    sprite.rect.y = event.pos[1]
+                    a1 = event.pos[0]
+                    a2 = event.pos[1]
+                    w = 1
+                    pygame.mouse.set_visible(False)
             else:
                 pygame.mouse.set_visible(True)
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.pos[0] > 0 and event.pos[1] > 0 and event.pos[0] < 800 and event.pos[1] < 800:
-                sprite.rect.x = event.pos[0]
-                sprite.rect.y = event.pos[1]
-                sprite = pygame.sprite.Sprite()
-                sprite.image = load_image("домик.png")
-                sprite.rect = sprite.image.get_rect()
-                sprite.rect.x = event.pos[0]
-                sprite.rect.y = event.pos[1]
-                k += board.add(event.pos[0], event.pos[1])
+                if q == 1:
+                    k += board.add(event.pos[0], event.pos[1])
+                    pygame.mouse.set_visible(True)
+                    q = 0
+            if event.pos[0] > 0 and event.pos[1] > 800 and event.pos[0] < 900 and event.pos[1] < 900:
+                q = 1
+                sprite = board.update(event.pos)
                 dom_group.add(sprite)
-                pygame.mouse.set_visible(True  )
     if w == 1:
         board.dist(a1, a2)
+    ramk_group.draw(screen)
+    dom_group.draw(screen)
     pygame.display.flip()
     clock.tick(50)
 
