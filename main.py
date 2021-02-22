@@ -1,13 +1,9 @@
-import pygame
-import sys
 import os
-from random import choice
+import sys
+import pygame
 
-FPS = 50
-pygame.init()
-size = width, height = 1000, 1000
-screen = pygame.display.set_mode(size)
-clock = pygame.time.Clock()
+# Изображение не получится загрузить
+# без предварительной инициализации pygame
 
 
 def load_image(name, colorkey=None):
@@ -27,268 +23,194 @@ def load_image(name, colorkey=None):
     return image
 
 
-def load_level(filename):
-    fullname = os.path.join('data', filename)
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    filename = "data/" + filename
-    # читаем уровень, убирая символы перевода строки
-    with open(filename, 'r') as mapFile:
-        level_map = [line.strip() for line in mapFile]
-
-    # и подсчитываем максимальную длину
-    max_width = max(map(len, level_map))
-
-    # дополняем каждую строку пустыми клетками ('.')
-    return list(map(lambda x: x.ljust(max_width, '.'), level_map))
-
-
-def terminate():
-    pygame.quit()
-    sys.exit()
+def urov(a, v, fps, k):
+    image = load_image(a)
+    rect = image.get_rect()
+    rect_x = rect[0]
+    rect[0] -= 1000
+    rect_y = rect[1]
+    screen.fill((255, 255, 255))
+    screen.blit(image, rect)
+    while True:
+        rect = rect.move(rect_x + v // fps, rect_y)
+        if rect[0] == 0:
+            break
+        screen.fill((0, 0, 255))
+        screen.blit(image, rect)
+        clock.tick(fps)
+        pygame.display.flip()
+    return rect, v, fps, k, image
 
 
-tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png'), 'water': load_image('woda.jpg'),
-               'forest': ['дерево.png', 'дуб.png', 'недуб.png', 'дуб.png', 'недуб.png', 'дуб.png', 'недуб.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png',
-                          'дуб.png', 'недуб.png', 'яблоня.png', 'дуб.png', 'недуб.png', 'яблоня.png'],
-               'desert': ['кактус.png', 'кактусмини.png'],
-                'fish': ['рыбка.png'], 'ramka': ['рамка_зелёная.png', 'рамка_красная.png'],}
+class AnimatedSprite(pygame.sprite.Sprite):
+    def __init__(self, sheet, columns, rows, x, y, m):
+        super().__init__(all_sprites)
+        self.frames = []
+        self.cut_sheet(sheet, columns, rows, x, y)
+        self.cur_frame = 0
+        self.image = self.frames[self.cur_frame]
+        self.rect = self.rect.move(x, y)
 
-tile_width = tile_height = 50
+    def cut_sheet(self, sheet, columns, rows, x, y):
+        self.rect = pygame.Rect(x, y, sheet.get_width() // columns,
+                                sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
+
+    def update(self):
+        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+        self.image = self.frames[self.cur_frame]
 
 
-class Tile(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
-        super().__init__(tiles_group, all_sprites)
-        if tile_type == 'forest':
-            self.image = load_image(choice(tile_images[tile_type]))
-        elif tile_type == 'desert':
-            self.image = load_image(choice(tile_images[tile_type]))
-        elif tile_type == 'fish':
-            self.image = load_image(choice(tile_images[tile_type]))
+def perem(x, y, p, sliz, m):
+    if p == -1 and x - 10 > 0:
+        x -= 10
+        sliz = "sliz1.png"
+        m = 2
+    elif p == 1 and x + 10 < 930:
+        x += 10
+        sliz = "sliz.png"
+        m = 0
+    elif p == -2 and y - 10 > 500:
+        y -= 10
+    elif p == 2 and y + 10 < 930:
+        y += 10
+    return x, y, sliz, m
+
+
+def prover(x, y, g):
+    if g == 1:
+        pass
+    elif x < 710 and x > 650:
+        if y < 670 and y > 630:
+            print('Ваня')
+            g = 1
         else:
-            self.image = tile_images[tile_type]
-        self.rect = self.image.get_rect().move(
-            tile_width * pos_x, tile_height * pos_y)
+            pass
+    else:
+        pass
+    return g
 
 
-# группы спрайтов
 all_sprites = pygame.sprite.Group()
-tiles_group = pygame.sprite.Group()
-dom_group = pygame.sprite.Group()
-ramk_group = pygame.sprite.Group()
 
 
-def generate_level(level):
-    forest = False
-    for y in range(len(level)):
-        for x in range(len(level[y])):
-            if level[y][x] == '.':
-                Tile('empty', x, y)
-            elif level[y][x] == '!':
-                Tile('empty', x, y)
-                Tile('forest', x, y)
-            elif level[y][x] == '#':
-                Tile('wall', x, y)
-            elif level[y][x] == '@':
-                Tile('water', x, y)
-            elif level[y][x] == '+':
-                Tile('wall', x, y)
-                Tile('desert', x, y)
-            elif level[y][x] == '-':
-                Tile('water', x, y)
-                Tile('fish', x, y)
-    return level, forest
-
-
-def random_level(level1):
-    level2 = [[]]
-    q = 0
-    s = choice(['#', '.', '@'])
-    a = choice([1, 2, 3, 4, 5, 6])
-    b = choice([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])
-    b1 = choice([2, 3, 4, 5, 6, 7, 8, 9, 10])
-    b2 = choice([2, 3, 4, 5, 6, 7, 8, 9, 10])
-    a1 = 0
-    a2 = 0
-    a3 = 0
-    a4 = 0
-    a5 = 0
-    a6 = 0
-    for i in range(len(level1)):
-        for j in range(len(level1)):
-            if q == 5 and j % 8 == 0:
-                s = choice(['#', '.', '@'])
-                q = 0
-            if s == '.':
-                a3 = 0
-                a4 = 0
-                a5 = 0
-                a6 = 0
-                if a1 == a:
-                    if a2 != b:
-                        a = choice([1, 2, 3, 4, 5, 6])
-                        a2 += 1
-                        level2[i].append('!')
-                        a1 = 0
+if __name__ == '__main__':
+    x = 100
+    y = 600
+    p = 0
+    m = 0
+    g = 0
+    prih = 0
+    stor = 1
+    sliz = "sliz.png"
+    pygame.init()
+    pygame.display.set_caption('')
+    size = width, height = 1000, 1000
+    screen = pygame.display.set_mode(size)
+    clock = pygame.time.Clock()
+    rect, v, fps, k, image = urov('fon.jpg', 100, 100, 0)
+    running = True
+    dragon = AnimatedSprite(load_image(sliz), 3, 1, x, y, m)
+    monet = AnimatedSprite(load_image('coin.png'), 6, 1, 700, 700, m)
+    all_sprites = pygame.sprite.Group()
+    fps = 10
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    p = -1
+                    stor = 0
+                elif event.key == pygame.K_RIGHT:
+                    p = 1
+                    stor = 1
+                elif event.key == pygame.K_UP:
+                    p = -2
+                elif event.key == pygame.K_DOWN:
+                    p = 2
+                elif event.key == pygame.K_SPACE:
+                    if stor == 1:
+                        if y - 50 > 500 and x + 50 < 930:
+                            all_sprites = pygame.sprite.Group()
+                            if g != 1:
+                                all_sprites.add(monet)
+                            sliz = 'sliz2.png'
+                            dragon = AnimatedSprite(load_image(sliz), 6, 1, x, y, m)
+                            while prih != 5:
+                                y -= 10
+                                x += 6
+                                screen.fill((0, 0, 0))
+                                screen.blit(image, rect)
+                                dragon.update()
+                                dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
+                                all_sprites.add(dragon)
+                                all_sprites.draw(screen)
+                                clock.tick(fps)
+                                pygame.display.flip()
+                                prih += 1
+                            prih = 0
+                        sliz = 'sliz.png'
+                        screen.fill((0, 0, 0))
+                        screen.blit(image, rect)
+                        dragon.update()
+                        dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
+                        all_sprites.add(dragon)
+                        all_sprites.draw(screen)
+                        clock.tick(fps)
+                        pygame.display.flip()
                     else:
-                        level2[i].append(s)
-                        a1 += 1
-                else:
-                    level2[i].append(s)
-                    a1 += 1
-            elif s == '#':
-                a2 = 0
-                a1 = 0
-                a5 = 0
-                a6 = 0
-                if a3 == a:
-                    if a4 != b1:
-                        a = choice([1, 2, 3, 4, 5, 6])
-                        a4 += 1
-                        level2[i].append('+')
-                        a3 = 0
-                    else:
-                        level2[i].append(s)
-                        a3 += 1
-                else:
-                    level2[i].append(s)
-                    a3 += 1
-            elif s == '@':
-                a3 = 0
-                a4 = 0
-                a2 = 0
-                a1 = 0
-                if a5 == a:
-                    if a6 != b2:
-                        a = choice([1, 2, 3, 4, 5, 6])
-                        a6 += 1
-                        level2[i].append('-')
-                        a5 = 0
-                    else:
-                        level2[i].append(s)
-                        a5 += 1
-                else:
-                    level2[i].append(s)
-                    a5 += 1
-        level2.append([])
-        q += 1
-    return level2
-
-
-class Board:
-    def __init__(self):
-        self.rect = [[]]
-        self.a = 0
-        self.ram = 0
-        self.dom = ['домик.png', 'замок.png']
-
-    def add(self, *rect):
-        x = 1
-        for i in self.rect:
-            if i == []:
-                break
-            i1, i2 = i[0][0], i[0][1]
-            if (i1 - rect[0]) ** 2 + (i2 - rect[1]) ** 2 < 250 ** 2:
-                x += 1
-        self.rect[self.a].append(rect)
-        self.rect.append([])
-        self.a += 1
-        return x
-
-    def dist(self, *pos):
-        pygame.draw.circle(screen, pygame.Color('green'), (pos[0] + 30, pos[1] + 30), 200, 2)
-
-    def ramk(self, name):
-        sprite = pygame.sprite.Sprite()
-        sprite.image = load_image(name)
-        sprite.rect = sprite.image.get_rect()
-        sprite.rect.x = self.ram
-        sprite.rect.y = 850
-        ramk_group.add(sprite)
-        if self.ram // 100 < 2:
-            sprite = pygame.sprite.Sprite()
-            sprite.image = load_image(self.dom[self.ram // 100])
-            sprite.rect = sprite.image.get_rect()
-            if self.ram // 100 == 0:
-                sprite.rect.x = self.ram
-                sprite.rect.y = 860
+                        if y - 50 > 500 and x - 50 > 0:
+                            all_sprites = pygame.sprite.Group()
+                            if g != 1:
+                                all_sprites.add(monet)
+                            sliz = 'sliz3.png'
+                            dragon = AnimatedSprite(load_image(sliz), 6, 1, x, y, m)
+                            while prih != 5:
+                                y -= 10
+                                x -= 6
+                                screen.fill((0, 0, 0))
+                                screen.blit(image, rect)
+                                dragon.update()
+                                dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
+                                all_sprites.add(dragon)
+                                all_sprites.draw(screen)
+                                clock.tick(fps)
+                                pygame.display.flip()
+                                prih += 1
+                            prih = 0
+                        sliz = 'sliz1.png'
+                        screen.fill((0, 0, 0))
+                        screen.blit(image, rect)
+                        dragon.update()
+                        dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
+                        all_sprites.add(dragon)
+                        all_sprites.draw(screen)
+                        clock.tick(fps)
+                        pygame.display.flip()
             else:
-                sprite.rect.x = self.ram
-                sprite.rect.y = 850
-            ramk_group.add(sprite)
-        self.ram += 100
-
-    def update(self, *pos):
-        sprite = pygame.sprite.Sprite()
-        sprite.image = load_image(self.dom[pos[0][0] // 100])
-        sprite.rect = sprite.image.get_rect()
-        sprite.rect.x = pos[0][0]
-        sprite.rect.y = pos[0][1]
-        return sprite
-
-
-k = 0
-w = 0
-q = 0
-level = load_level('levelex1.txt')
-level = random_level(level)
-level, forest = generate_level(level)
-running = True
-board = Board()
-for _ in range(10):
-    board.ramk('рамка_красная.png')
-while running:
-    screen.fill((0, 0, 0))
-    all_sprites.draw(screen)
-    tiles_group.draw(screen)
-    font = pygame.font.Font(None, 20)
-    text = font.render(str(k), True, [255, 255, 255])
-    textpos = (900, 10)
-    screen.blit(text, textpos)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEMOTION:
-            if event.pos[0] > 0 and event.pos[1] > 0 and event.pos[0] < 800 and event.pos[1] < 800:
-                if q == 1:
-                    sprite.rect.x = event.pos[0]
-                    sprite.rect.y = event.pos[1]
-                    a1 = event.pos[0]
-                    a2 = event.pos[1]
-                    w = 1
-                    pygame.mouse.set_visible(False)
-            else:
-                pygame.mouse.set_visible(True)
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.pos[0] > 0 and event.pos[1] > 0 and event.pos[0] < 800 and event.pos[1] < 800:
-                if q == 1:
-                    k += board.add(event.pos[0], event.pos[1])
-                    pygame.mouse.set_visible(True)
-                    q = 0
-            if event.pos[0] > 0 and event.pos[1] > 800 and event.pos[0] < 900 and event.pos[1] < 900:
-                q = 1
-                sprite = board.update(event.pos)
-                dom_group.add(sprite)
-    if w == 1:
-        board.dist(a1, a2)
-    ramk_group.draw(screen)
-    dom_group.draw(screen)
-    pygame.display.flip()
-    clock.tick(50)
-
+                p = 0
+        screen.fill((0, 0, 0))
+        screen.blit(image, rect)
+        x, y, sliz, m = perem(x, y, p, sliz, m)
+        if p != 0:
+            dragon.update()
+        else:
+            dragon = AnimatedSprite(load_image(sliz), 3, 1, x, y, m)
+            all_sprites = pygame.sprite.Group()
+        dragon.cut_sheet(load_image(sliz), 3, 1, x, y)
+        if g != 1:
+            monet.cut_sheet(load_image('coin.png'), 6, 1, 700, 700)
+            monet.update()
+            all_sprites.add(monet)
+        g = prover(x, y, g)
+        clock.tick(fps)
+        all_sprites.add(dragon)
+        all_sprites.draw(screen)
+        pygame.display.flip()
 
 pygame.quit()
