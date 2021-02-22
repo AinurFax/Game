@@ -66,27 +66,41 @@ class AnimatedSprite(pygame.sprite.Sprite):
 
 
 def perem(x, y, p, sliz, m):
+    global hag
     if p == -1 and x - 10 > 0:
+        if hag != 0:
+            hag -= 1
+            x -= 20
         x -= 10
         sliz = "sliz1.png"
         m = 2
     elif p == 1 and x + 10 < 930:
+        if hag != 0:
+            hag -= 1
+            x += 20
         x += 10
         sliz = "sliz.png"
         m = 0
     elif p == -2 and y - 10 > 500:
+        if hag != 0:
+            hag -= 1
+            y -= 20
         y -= 10
     elif p == 2 and y + 10 < 930:
+        if hag != 0:
+            hag -= 1
+            y += 20
         y += 10
     return x, y, sliz, m
 
 
 def prover(x, y, g):
+    global hag
     if g == 1:
         pass
-    elif x < 710 and x > 650:
-        if y < 670 and y > 630:
-            print('Ваня')
+    elif x < 710 and x > 670:
+        if y < 760 and y > 720:
+            hag = 100
             g = 1
         else:
             pass
@@ -107,6 +121,7 @@ if __name__ == '__main__':
     prih = 0
     stor = 1
     sliz = "sliz.png"
+    hag = 0
     pygame.init()
     pygame.display.set_caption('')
     size = width, height = 1000, 1000
@@ -115,7 +130,7 @@ if __name__ == '__main__':
     rect, v, fps, k, image = urov('fon.jpg', 100, 100, 0)
     running = True
     dragon = AnimatedSprite(load_image(sliz), 3, 1, x, y, m)
-    monet = AnimatedSprite(load_image('coin.png'), 6, 1, 700, 700, m)
+    monet = AnimatedSprite(load_image('zell.png'), 4, 1, 700, 700, m)
     all_sprites = pygame.sprite.Group()
     fps = 10
     while running:
@@ -142,6 +157,8 @@ if __name__ == '__main__':
                             sliz = 'sliz2.png'
                             dragon = AnimatedSprite(load_image(sliz), 6, 1, x, y, m)
                             while prih != 5:
+                                if g != 1:
+                                    monet.update()
                                 y -= 10
                                 x += 6
                                 screen.fill((0, 0, 0))
@@ -204,7 +221,7 @@ if __name__ == '__main__':
             all_sprites = pygame.sprite.Group()
         dragon.cut_sheet(load_image(sliz), 3, 1, x, y)
         if g != 1:
-            monet.cut_sheet(load_image('coin.png'), 6, 1, 700, 700)
+            monet.cut_sheet(load_image('zell.png'), 4, 1, 700, 700)
             monet.update()
             all_sprites.add(monet)
         g = prover(x, y, g)
