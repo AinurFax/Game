@@ -77,6 +77,7 @@ def perem(x, y, p, sliz, m):
         else:
             sliz = "sliz1.png"
         m = 2
+        ob.nah('left')
     elif p == 1 and x + 10 < 930:
         if hag != 0:
             hag -= 1
@@ -87,21 +88,24 @@ def perem(x, y, p, sliz, m):
         else:
             sliz = "sliz.png"
         m = 0
+        ob.nah('right')
     elif p == -2 and y - 10 > 500:
         if hag != 0:
             hag -= 1
             y -= 20
         y -= 10
+        ob.nah('hight')
     elif p == 2 and y + 10 < 930:
         if hag != 0:
             hag -= 1
             y += 20
         y += 10
+        ob.nah('down')
     return x, y, sliz, m
 
 
 def prover(x, y, g, m):
-    global hag, hop
+    global hag, hop, oby, aaa
     if g == 1:
         pass
     elif m == 1:
@@ -109,6 +113,9 @@ def prover(x, y, g, m):
             if y < 760 and y > 720:
                 hag = 100
                 g = 1
+                if oby == 4:
+                    oby += 1
+                    aaa[2] = 1
             else:
                 pass
     elif m == 2:
@@ -116,6 +123,9 @@ def prover(x, y, g, m):
             if y < 760 and y > 720:
                 hop = 100
                 g = 1
+                if oby == 3:
+                    oby += 1
+                    aaa[1] = 1
             else:
                 pass
     elif m == 3:
@@ -124,6 +134,9 @@ def prover(x, y, g, m):
                 global sl
                 sl = 1000
                 g = 1
+                if oby == 2:
+                    oby += 1
+                    aaa[0] = 1
             else:
                 pass
     else:
@@ -131,7 +144,151 @@ def prover(x, y, g, m):
     return g
 
 
+def prihok(y, x, g, sliz, sl, hop, prih, stor, dragon, all_sprites):
+    if stor == 1:
+        if y - 50 > 500 and x + 50 < 930:
+            all_sprites = pygame.sprite.Group()
+            if g[0] == 0:
+                all_sprites.add(monet)
+            if g[1] == 0:
+                all_sprites.add(monet1)
+            if g[2] == 0:
+                all_sprites.add(monet2)
+            if sl - 1 > 0:
+                sliz = 'sliz7.png'
+            else:
+                sliz = 'sliz2.png'
+            dragon = AnimatedSprite(load_image(sliz), 6, 1, x, y, m)
+            while prih != 5:
+                if g[0] == 0:
+                    monet.update()
+                if g[1] == 0:
+                    monet1.update()
+                if g[2] == 0:
+                    monet2.update()
+                if hop - 1 > 0:
+                    hop -= 1
+                    y -= 20
+                    x += 12
+                y -= 10
+                x += 6
+                screen.fill((0, 0, 0))
+                screen.blit(image, rect)
+                dragon.update()
+                dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
+                all_sprites.add(dragon)
+                all_sprites.draw(screen)
+                clock.tick(fps)
+                pygame.display.flip()
+                prih += 1
+            prih = 0
+        if sl - 1 > 0:
+            sliz = "sliz4.png"
+        else:
+            sliz = 'sliz.png'
+        screen.fill((0, 0, 0))
+        screen.blit(image, rect)
+        dragon.update()
+        dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
+        all_sprites.add(dragon)
+        all_sprites.draw(screen)
+        clock.tick(fps)
+        pygame.display.flip()
+    else:
+        if y - 50 > 500 and x - 50 > 0:
+            all_sprites = pygame.sprite.Group()
+            if g[0] == 0:
+                all_sprites.add(monet)
+            if g[1] == 0:
+                all_sprites.add(monet1)
+            if g[2] == 0:
+                all_sprites.add(monet2)
+            if sl - 1 > 0:
+                sliz = 'sliz6.png'
+            else:
+                sliz = 'sliz3.png'
+            dragon = AnimatedSprite(load_image(sliz), 6, 1, x, y, m)
+            while prih != 5:
+                if hop - 1 > 0:
+                    hop -= 1
+                    y -= 20
+                    x -= 12
+                y -= 10
+                x -= 6
+                screen.fill((0, 0, 0))
+                screen.blit(image, rect)
+                dragon.update()
+                dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
+                all_sprites.add(dragon)
+                all_sprites.draw(screen)
+                clock.tick(fps)
+                pygame.display.flip()
+                prih += 1
+            prih = 0
+        if sl - 1 > 0:
+            sliz = "sliz5.png"
+        else:
+            sliz = 'sliz1.png'
+        screen.fill((0, 0, 0))
+        screen.blit(image, rect)
+        dragon.update()
+        dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
+        all_sprites.add(dragon)
+        all_sprites.draw(screen)
+        clock.tick(fps)
+        pygame.display.flip()
+    ob.nah('space')
+    return y, x, g, sliz, sl, hop, prih, dragon, all_sprites
+
+
 all_sprites = pygame.sprite.Group()
+
+
+class Obyh():
+    def __init__(self):
+        self.left = 0
+        self.right = 0
+        self.hight = 0
+        self.down = 0
+        self.space = 0
+        self.prov = 0
+        self.zel = 0
+        self.zel1 = 0
+        self.zel2 = 0
+
+    def prover(self):
+        if self.left == 1 and self.right == 1 and self.hight == 1 and self.down == 1:
+            if self.prov == 0:
+                self.prov = 1
+                return True
+        if self.space == 1:
+            if self.prov == 1:
+                self.prov = 2
+                return True
+        if self.zel == 1:
+            if self.prov == 2:
+                self.prov = 3
+                return True
+        if self.zel1 == 1:
+            if self.prov == 3:
+                self.prov = 4
+                return True
+        if self.zel2 == 1:
+            if self.prov == 4:
+                self.prov = 5
+                return True
+
+    def nah(self, a):
+            if a == 'left':
+                self.left = 1
+            elif a == 'right':
+                self.right = 1
+            elif a == 'hight':
+                self.hight = 1
+            elif a == 'space':
+                self.space = 1
+            else:
+                self.down = 1
 
 
 if __name__ == '__main__':
@@ -146,6 +303,9 @@ if __name__ == '__main__':
     hag = 0
     hop = 0
     sl = 0
+    ob = Obyh()
+    oby = 0
+    aaa = [0, 0, 0]
     pygame.init()
     pygame.display.set_caption('')
     size = width, height = 1000, 1000
@@ -157,6 +317,7 @@ if __name__ == '__main__':
     monet = AnimatedSprite(load_image('zell.png'), 4, 1, 700, 700, m)
     monet1 = AnimatedSprite(load_image('zell1.png'), 4, 1, 500, 700, m)
     monet2 = AnimatedSprite(load_image('zell2.png'), 4, 1, 300, 700, m)
+    obyhen = AnimatedSprite(load_image('obyh.png'), 6, 1, 0, 0, 0)
     all_sprites = pygame.sprite.Group()
     fps = 10
     while running:
@@ -175,98 +336,7 @@ if __name__ == '__main__':
                 elif event.key == pygame.K_DOWN:
                     p = 2
                 elif event.key == pygame.K_SPACE:
-                    if stor == 1:
-                        if y - 50 > 500 and x + 50 < 930:
-                            all_sprites = pygame.sprite.Group()
-                            if g[0] == 0:
-                                all_sprites.add(monet)
-                            if g[1] == 0:
-                                all_sprites.add(monet1)
-                            if g[2] == 0:
-                                all_sprites.add(monet2)
-                            if sl - 1 > 0:
-                                sliz = 'sliz7.png'
-                            else:
-                                sliz = 'sliz2.png'
-                            dragon = AnimatedSprite(load_image(sliz), 6, 1, x, y, m)
-                            while prih != 5:
-                                if g[0] == 0:
-                                    monet.update()
-                                if g[1] == 0:
-                                    monet1.update()
-                                if g[2] == 0:
-                                    monet2.update()
-                                if hop - 1 > 0:
-                                    hop -= 1
-                                    y -= 20
-                                    x += 12
-                                y -= 10
-                                x += 6
-                                screen.fill((0, 0, 0))
-                                screen.blit(image, rect)
-                                dragon.update()
-                                dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
-                                all_sprites.add(dragon)
-                                all_sprites.draw(screen)
-                                clock.tick(fps)
-                                pygame.display.flip()
-                                prih += 1
-                            prih = 0
-                        if sl - 1 > 0:
-                            sliz = "sliz4.png"
-                        else:
-                            sliz = 'sliz.png'
-                        screen.fill((0, 0, 0))
-                        screen.blit(image, rect)
-                        dragon.update()
-                        dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
-                        all_sprites.add(dragon)
-                        all_sprites.draw(screen)
-                        clock.tick(fps)
-                        pygame.display.flip()
-                    else:
-                        if y - 50 > 500 and x - 50 > 0:
-                            all_sprites = pygame.sprite.Group()
-                            if g[0] == 0:
-                                all_sprites.add(monet)
-                            if g[1] == 0:
-                                all_sprites.add(monet1)
-                            if g[2] == 0:
-                                all_sprites.add(monet2)
-                            if sl - 1 > 0:
-                                sliz = 'sliz6.png'
-                            else:
-                                sliz = 'sliz3.png'
-                            dragon = AnimatedSprite(load_image(sliz), 6, 1, x, y, m)
-                            while prih != 5:
-                                if hop - 1 > 0:
-                                    hop -= 1
-                                    y -= 20
-                                    x -= 12
-                                y -= 10
-                                x -= 6
-                                screen.fill((0, 0, 0))
-                                screen.blit(image, rect)
-                                dragon.update()
-                                dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
-                                all_sprites.add(dragon)
-                                all_sprites.draw(screen)
-                                clock.tick(fps)
-                                pygame.display.flip()
-                                prih += 1
-                            prih = 0
-                        if sl - 1 > 0:
-                            sliz = "sliz5.png"
-                        else:
-                            sliz = 'sliz1.png'
-                        screen.fill((0, 0, 0))
-                        screen.blit(image, rect)
-                        dragon.update()
-                        dragon.cut_sheet(load_image(sliz), 6, 1, x, y)
-                        all_sprites.add(dragon)
-                        all_sprites.draw(screen)
-                        clock.tick(fps)
-                        pygame.display.flip()
+                    y, x, g, sliz, sl, hop, prih, dragon, all_sprites = prihok(y, x, g, sliz, sl, hop, prih, stor, dragon, all_sprites)
             else:
                 p = 0
         if sl - 1 > 0:
@@ -295,6 +365,33 @@ if __name__ == '__main__':
         g[0] = prover(x, y, g[0], 1)
         g[1] = prover(x, y, g[1], 2)
         g[2] = prover(x, y, g[2], 3)
+        if oby == 0:
+            if ob.prover():
+                oby += 1
+                obyhen.update()
+            all_sprites.add(obyhen)
+        elif oby == 1:
+            if ob.prover():
+                oby += 1
+                obyhen.update()
+            all_sprites.add(obyhen)
+        elif oby == 2:
+            all_sprites.add(obyhen)
+        elif oby == 3:
+            if aaa[0] == 1:
+                obyhen.update()
+                aaa[0] = 2
+            all_sprites.add(obyhen)
+        elif oby == 4:
+            if aaa[1] == 1:
+                obyhen.update()
+                aaa[1] = 2
+            all_sprites.add(obyhen)
+        elif oby == 5:
+            if aaa[2] == 1:
+                obyhen.update()
+                aaa[2] = 2
+            all_sprites.add(obyhen)
         clock.tick(fps)
         all_sprites.add(dragon)
         all_sprites.draw(screen)
