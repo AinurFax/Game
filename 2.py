@@ -1,58 +1,58 @@
+import os
+import sys
 import pygame
+import time
+
+# Изображение не получится загрузить
+# без предварительной инициализации pygame
+
+def load_image(name, colorkey=None):
+    fullname = os.path.join('data', name)
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
+
+    if colorkey is not None:
+        image = image.convert()
+        if colorkey == -1:
+            colorkey = image.get_at((0, 0))
+        image.set_colorkey(colorkey)
+    else:
+        image = image.convert_alpha()
+    return image
 
 
-class Board:
-    # создание поля
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.board = [[0] * width for _ in range(height)]
-        # значения по умолчанию
-        self.left = 100
-        self.top = 100
-        self.cell_size = 100
+if __name__ == '__main__':
+    pygame.init()
+    pygame.display.set_caption('Герой двигается!')
+    size = width, height = 600, 300
+    screen = pygame.display.set_mode(size)
+    clock = pygame.time.Clock()
 
-    # настройка внешнего вида
-    def set_view(self, left, top, cell_size):
-        self.left = left
-        self.top = top
-        self.cell_size = cell_size
+    image = load_image('gameover.png')
+    rect = image.get_rect()
+    rect_x = rect[0]
+    rect[0] -= 600
+    rect_y = rect[1]
+    screen.fill((255, 255, 255))
+    screen.blit(image, rect)
+    v = 100
+    fps = 100
+    k = 0
 
-    def render(self):
-        for x in range(self.width):
-            for y in range(self.height):
-                pygame.draw.rect(screen, (255, 255, 255),
-                (x * self.cell_size + self.left, y * self.cell_size + self.top,
-                 self.cell_size * 2, self.cell_size), 1)
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        if k == 0:
+            rect = rect.move(rect_x + v // fps, rect_y)
+        if rect[0] == 0:
+            k = 1
+        screen.fill((0, 0, 255))
+        screen.blit(image, rect)
+        clock.tick(fps)
+        pygame.display.flip()
 
-    def on_click(self, cell):
-        print(cell)
-
-    def get_cell(self, mouse_pos):
-        cell_x = (mouse_pos[0] - self.left) // (self.cell_size * 2)
-        cell_y = (mouse_pos[1] - self.top) // self.cell_size
-        if cell_x < 0 or cell_x >= self.width or cell_y < 0 or cell_y >= self.width:
-            return None
-        return cell_x, cell_y
-
-    def get_click(self, mouse_pos):
-        cell = self.get_cell(mouse_pos)
-        if cell:
-            self.on_click(cell)
-
-
-pygame.init()
-size = 500, 500
-screen = pygame.display.set_mode(size)
-board = Board(1, 1)
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            board.get_click(event.pos)
-    screen.fill((0, 0, 0))
-    board.render()
-    pygame.display.flip()
 pygame.quit()

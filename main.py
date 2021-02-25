@@ -361,14 +361,47 @@ class Board:
     def get_cell(self, mouse_pos):
         cell_x = (mouse_pos[0] - self.left) // (self.cell_size * 2)
         cell_y = (mouse_pos[1] - self.top) // self.cell_size
-        if cell_x < 0 or cell_x >= self.width or cell_y < 0 or cell_y >= self.width:
+        if cell_x < 0 or cell_x >= self.width or cell_y < 0 or cell_y >= self.height:
             return None
         return cell_x, cell_y
 
     def get_click(self, mouse_pos):
         cell = self.get_cell(mouse_pos)
         if cell:
-            return self.on_click(cell)
+            if cell[1] == 0:
+                return True
+            if cell[1] == 1:
+                while running:
+                    a = 0
+                    for event in pygame.event.get():
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            if event.pos[0] >= 720 and event.pos[0] <= 740:
+                                if event.pos[1] >= 360 and event.pos[1] <= 380:
+                                    a = 1
+                    if a == 1:
+                        break
+                    screen.fill((0, 0, 0))
+                    image = load_image('data.png')
+                    screen.blit(image, (0, 0))
+                    image = load_image('list.png')
+                    screen.blit(image, (320, 350))
+                    image = load_image('avtors.png')
+                    screen.blit(image, (320, 550))
+                    board.render()
+                    pygame.draw.rect(screen, pygame.Color('white'), (250, 350, 500, 400))
+                    #image = load_image('Vania.jpg')
+                    #image = pygame.transform.scale(image, (500, 400))
+                    #screen.blit(image, (250, 350))
+                    font = pygame.font.Font(None, 50)
+                    text = font.render("Фахруллин Айнур", True, (100, 255, 100))
+                    text1 = font.render("Ежов Иван", True, (100, 255, 100))
+                    screen.blit(text, (270, 400))
+                    screen.blit(text1, (270, 500))
+                    pygame.draw.line(screen, (0, 255, 0), (720, 360), (740, 380), 5)
+                    pygame.draw.line(screen, (0, 255, 0), (720, 380), (740, 360), 5)
+                    pygame.display.flip()
+            if cell[1] == 2:
+                return 3
         else:
             return False
 
@@ -410,6 +443,8 @@ if __name__ == '__main__':
         screen.blit(image, (0, 0))
         image = load_image('list.png')
         screen.blit(image, (320, 350))
+        image = load_image('avtors.png')
+        screen.blit(image, (320, 550))
         board.render()
         pygame.display.flip()
         if a == True:
