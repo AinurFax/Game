@@ -1390,8 +1390,8 @@ if __name__ == '__main__':
             screen.blit(image1, (510, 0))
             all_sprites.add(portal)
             portal.update()
-            if y <= 20 and y >= -20:
-                if x >= 510 and x <= 630:
+            if y <= 10 and y >= -10:
+                if x >= 420 and x <= 630:
                     nb = 0
                     while running:
                         for event in pygame.event.get():
