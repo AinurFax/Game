@@ -1390,7 +1390,7 @@ if __name__ == '__main__':
             screen.blit(image1, (510, 0))
             all_sprites.add(portal)
             portal.update()
-            if y <= 10 and y >= -10:
+            if y <= 10 and y >= -30:
                 if x >= 420 and x <= 630:
                     nb = 0
                     while running:
@@ -1412,8 +1412,9 @@ if __name__ == '__main__':
                         image = load_image('ob.png')
                         screen.blit(image, (320, 750))
                         board.render()
+                        image = load_image('kon.png')
+                        image = pygame.transform.scale(image, (500, 400))
                         screen.blit(image, (250, 350))
-                        pygame.draw.rect(screen, pygame.Color('white'), (250, 350, 500, 400))
                         pygame.display.flip()
         all_sprites.add(dragon)
         all_sprites.draw(screen)
