@@ -268,6 +268,37 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 5:
+            if p == -1 and x - 10 >= 740:
+                if start2 != 0:
+                    x -= 20
+                x -= 10
+                if start != 0:
+                    sliz = "sliz5.png"
+                else:
+                    sliz = "sliz1.png"
+                m = 2
+                ob.nah('left')
+            elif p == 1 and x + 10 <= 810:
+                if start2 != 0:
+                    x += 20
+                x += 10
+                if start != 0:
+                    sliz = "sliz4.png"
+                else:
+                    sliz = "sliz.png"
+                m = 0
+                ob.nah('right')
+            elif p == -2 and y - 10 >= 520:
+                if start2 != 0:
+                    y -= 20
+                y -= 10
+                ob.nah('hight')
+            elif p == 2 and y + 10 <= 540:
+                if start2 != 0:
+                    y += 20
+                y += 10
+                ob.nah('down')
+        elif n == 6:
             if p == -1 and x - 10 >= 590:
                 if start2 != 0:
                     x -= 20
@@ -278,7 +309,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 700:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -288,49 +319,18 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz.png"
                 m = 0
                 ob.nah('right')
-            elif p == -2 and y - 10 >= 300:
+            elif p == -2 and y - 10 >= 470:
                 if start2 != 0:
                     y -= 20
                 y -= 10
                 ob.nah('hight')
-            elif p == 2 and y + 10 <= 680:
-                if start2 != 0:
-                    y += 20
-                y += 10
-                ob.nah('down')
-        elif n == 6:
-            if p == -1 and x - 10 >= 400:
-                if start2 != 0:
-                    x -= 20
-                x -= 10
-                if start != 0:
-                    sliz = "sliz5.png"
-                else:
-                    sliz = "sliz1.png"
-                m = 2
-                ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
-                if start2 != 0:
-                    x += 20
-                x += 10
-                if start != 0:
-                    sliz = "sliz4.png"
-                else:
-                    sliz = "sliz.png"
-                m = 0
-                ob.nah('right')
-            elif p == -2 and y - 10 >= 300:
-                if start2 != 0:
-                    y -= 20
-                y -= 10
-                ob.nah('hight')
-            elif p == 2 and y + 10 <= 670:
+            elif p == 2 and y + 10 <= 500:
                 if start2 != 0:
                     y += 20
                 y += 10
                 ob.nah('down')
         elif n == 7:
-            if p == -1 and x - 10 >= 400:
+            if p == -1 and x - 10 >= 470:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -340,7 +340,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 560:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -350,18 +350,18 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz.png"
                 m = 0
                 ob.nah('right')
-            elif p == -2 and y - 10 >= 300:
+            elif p == -2 and y - 10 >= 430:
                 if start2 != 0:
                     y -= 20
                 y -= 10
                 ob.nah('hight')
-            elif p == 2 and y + 10 <= 670:
+            elif p == 2 and y + 10 <= 450:
                 if start2 != 0:
                     y += 20
                 y += 10
                 ob.nah('down')
         elif n == 8:
-            if p == -1 and x - 10 >= 200:
+            if p == -1 and x - 10 >= 590:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -371,7 +371,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 700:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -381,12 +381,12 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz.png"
                 m = 0
                 ob.nah('right')
-            elif p == -2 and y - 10 >= 320:
+            elif p == -2 and y - 10 >= 390:
                 if start2 != 0:
                     y -= 20
                 y -= 10
                 ob.nah('hight')
-            elif p == 2 and y + 10 <= 670:
+            elif p == 2 and y + 10 <= 420:
                 if start2 != 0:
                     y += 20
                 y += 10
