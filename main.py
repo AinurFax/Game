@@ -392,7 +392,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 9:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 470:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -402,7 +402,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 560:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -423,7 +423,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 10:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 390:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -433,7 +433,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 440:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -454,7 +454,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 11:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 250:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -464,7 +464,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 320:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -485,7 +485,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 12:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 390:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -495,7 +495,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 440:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -516,7 +516,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 13:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 470:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -526,7 +526,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 560:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -547,7 +547,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 14:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 590:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -557,7 +557,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 700:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -578,7 +578,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 15:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 470:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -588,7 +588,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 560:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -609,7 +609,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 16:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 590:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -619,7 +619,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 700:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -640,7 +640,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 17:
-            if p == -1 and x - 10 >= 0:
+            if p == -1 and x - 10 >= 470:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -650,7 +650,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 560:
                 if start2 != 0:
                     x += 20
                 x += 10
@@ -671,7 +671,7 @@ def perem(x, y, p, sliz, m):
                 y += 10
                 ob.nah('down')
         elif n == 18:
-            if p == -1 and x - 10 >= -30:
+            if p == -1 and x - 10 >= 590:
                 if start2 != 0:
                     x -= 20
                 x -= 10
@@ -681,7 +681,7 @@ def perem(x, y, p, sliz, m):
                     sliz = "sliz1.png"
                 m = 2
                 ob.nah('left')
-            elif p == 1 and x + 10 <= 900:
+            elif p == 1 and x + 10 <= 700:
                 if start2 != 0:
                     x += 20
                 x += 10
